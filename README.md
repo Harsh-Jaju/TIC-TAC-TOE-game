@@ -24,6 +24,9 @@ A modern, glassmorphism-styled Tic-Tac-Toe game with a C++ backend.
    [http://localhost:8080](http://localhost:8080)
 
 ## Features
+- **Game Modes**:
+  - **Player vs AI**: Challenge an unbeatable AI powered by the Minimax algorithm.
+  - **2 Player (PvP)**: Play locally with a friend on the same device.
 - **Frontend**: HTML5, Modern CSS3 (Glassmorphism, Animations), JavaScript.
 - **Backend**: C++ (Custom HTTP Server with Minimax AI).
 - **AI**: Unbeatable Minimax algorithm.
