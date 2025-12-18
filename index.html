@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
+    <div class="mode-selection" id="modeSelection">
+        <h1>Neon Tic-Tac-Toe</h1>
+        <p>Choose your game mode</p>
+        <div class="mode-buttons">
+            <button class="mode-btn" id="vsAiBtn">Vs AI</button>
+            <button class="mode-btn" id="twoPlayerBtn">2 Players</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="gameContainer">
         <h1>Tic <span class="highlight">Tac</span> Toe</h1>
         <div class="status" id="status">Player X's Turn</div>
-        
+
         <div class="game-board" id="board">
             <div class="cell" data-index="0"></div>
             <div class="cell" data-index="1"></div>
@@ -26,9 +37,13 @@
             <div class="cell" data-index="8"></div>
         </div>
 
-        <button class="reset-btn" id="resetBtn">Restart Game</button>
+        <div class="controls">
+            <button class="reset-btn" id="resetBtn">Restart Game</button>
+            <button class="reset-btn secondary" id="menuBtn">Main Menu</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

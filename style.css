@@ -132,3 +132,78 @@ h1 {
 .cell.x, .cell.o {
     animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+/* Mode Selection */
+.mode-selection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mode-selection h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.mode-selection p {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-bottom: 2rem;
+}
+
+.mode-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.mode-btn {
+    padding: 15px 35px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.reset-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    box-shadow: none;
+}
+
+.reset-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}

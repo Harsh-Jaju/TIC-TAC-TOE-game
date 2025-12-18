@@ -3,9 +3,17 @@ const cells = document.querySelectorAll('.cell');
 const statusElement = document.getElementById('status');
 const resetBtn = document.getElementById('resetBtn');
 
+// New Elements
+const modeSelection = document.getElementById('modeSelection');
+const gameContainer = document.getElementById('gameContainer');
+const vsAiBtn = document.getElementById('vsAiBtn');
+const twoPlayerBtn = document.getElementById('twoPlayerBtn');
+const menuBtn = document.getElementById('menuBtn');
+
 let board = ['', '', '', '', '', '', '', '', ''];
 let gameActive = true;
-let currentPlayer = 'X'; // Player is always X, AI is O
+let currentPlayer = 'X'; 
+let gameMode = 'AI'; // 'AI' or 'PVP'
 
 const checkWinner = (currentBoard) => {
     const winPatterns = [
@@ -26,10 +34,13 @@ const checkWinner = (currentBoard) => {
 const handleCellClick = async (e) => {
     const index = e.target.getAttribute('data-index');
 
-    if (board[index] !== '' || !gameActive || currentPlayer !== 'X') return;
+    if (board[index] !== '' || !gameActive) return;
+    
+    // In AI mode, strictly enforce that player controls X only
+    if (gameMode === 'AI' && currentPlayer !== 'X') return;
 
-    // Player Move
-    makeMove(index, 'X');
+    // Player Move (or current turn in PVP)
+    makeMove(index, currentPlayer);
 
     // Check game state
     let winner = checkWinner(board);
@@ -38,30 +49,36 @@ const handleCellClick = async (e) => {
         return;
     }
 
-    // AI Move
-    currentPlayer = 'O';
-    statusElement.innerText = "AI is thinking...";
+    if (gameMode === 'AI') {
+        // AI Logic
+        currentPlayer = 'O';
+        statusElement.innerText = "AI is thinking...";
 
-    try {
-        const aiMoveIndex = await getAIMoveFromBackend(board);
+        try {
+            const aiMoveIndex = await getAIMoveFromBackend(board);
 
-        // Add a small artificial delay for realism if it's too fast
-        setTimeout(() => {
-            if (aiMoveIndex !== -1 && gameActive) {
-                makeMove(aiMoveIndex, 'O');
-                winner = checkWinner(board);
-                if (winner) {
-                    endGame(winner);
-                } else {
-                    currentPlayer = 'X';
-                    statusElement.innerText = "Player X's Turn";
+            // Add a small artificial delay for realism
+            setTimeout(() => {
+                if (aiMoveIndex !== -1 && gameActive) {
+                    makeMove(aiMoveIndex, 'O');
+                    winner = checkWinner(board);
+                    if (winner) {
+                        endGame(winner);
+                    } else {
+                        currentPlayer = 'X';
+                        statusElement.innerText = "Player X's Turn";
+                    }
                 }
-            }
-        }, 500);
+            }, 500);
 
-    } catch (error) {
-        console.error("Error communicating with backend:", error);
-        statusElement.innerText = "Error: Ensure C++ server is running!";
+        } catch (error) {
+            console.error("Error communicating with backend:", error);
+            statusElement.innerText = "Error: Ensure C++ server is running!";
+        }
+    } else {
+        // PVP Logic
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        statusElement.innerText = `Player ${currentPlayer}'s Turn`;
     }
 };
 
@@ -93,7 +110,6 @@ const resetGame = () => {
 };
 
 const getAIMoveFromBackend = async (currentBoard) => {
-    // Convert board to string typically, but let's send JSON
     const response = await fetch('/api/move', {
         method: 'POST',
         headers: {
@@ -108,5 +124,22 @@ const getAIMoveFromBackend = async (currentBoard) => {
     return data.move;
 };
 
+// Mode Selection Logic
+const startGame = (mode) => {
+    gameMode = mode;
+    modeSelection.classList.add('hidden');
+    gameContainer.classList.remove('hidden');
+    resetGame();
+};
+
+const showMenu = () => {
+    gameContainer.classList.add('hidden');
+    modeSelection.classList.remove('hidden');
+    resetGame();
+};
+
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 resetBtn.addEventListener('click', resetGame);
+menuBtn.addEventListener('click', showMenu);
+vsAiBtn.addEventListener('click', () => startGame('AI'));
+twoPlayerBtn.addEventListener('click', () => startGame('PVP'));
